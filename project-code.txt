@@ -1,0 +1,598 @@
+		area project, code, readonly
+
+			export __main
+__main		proc
+		
+			mov r1, #0x00
+			ldr r0, =0x40004C00			;Universal base address
+			add r0, #0x21				;Port 4 
+			add r1, #0xFF				;All pins as output for port 4
+			strb r1, [r0, #0x04]
+			
+			
+			ldr r2, =0x40004C00
+			add r2, #0x40               ;Port 5
+			add r3, #0xFF               ;All pins as output for port 5
+			strb r3, [r2, #0x04]
+						
+		    ldr r6, =0x40004C00
+			add r6, #0x41               ;Port 6
+			add r7, #0x03               ;Pins 0 and 1 are output
+			strb r7, [r6, #0x04]
+			
+			ldr r9, =0x40004C00
+			add r9, #0x20				;Port 3 only being used to read the state of the button
+			mov r10, #0x00				;All pin are inputs but we are only going to use pin 7.
+			strb r10, [r9, #0x04]
+			
+			mov r5, #0
+			mov r11, #20 
+START       function                    ;Blink the winner light
+			push{lr}
+			
+			mov r1, #0x80                ;ON/Pin0
+			strb r1, [r0, #0x02]
+			bl delay
+			mov r1, #0x00              
+			strb r1, [r0, #0x02]
+			bl delay
+			sub r11, #1
+			cmp r11, #0
+			bne START
+			cmp r5, #0
+			beq LEDs
+			cmp r5, #1
+			beq LEDs
+			b LEDs2
+			
+			LTORG
+            pop{lr}
+			
+			endp
+
+
+LEDs       	function
+			push{lr}
+			mov r8, #20
+			mov r1, #0x01			;ON/Pin0
+			
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00              
+			strb r1, [r0, #0x02]
+			bl delay
+			mov r1, #0x02                ;ON/Pin1
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delay
+			mov r1, #0x04                ;ON/Pin2
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delay
+			mov r1, #0x08                ;ON/Pin3
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delay
+			mov r1, #0x10                ;ON/Pin4
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delay
+			mov r1, #0x20                ;ON/Pin5
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delay
+			mov r1, #0x40                ;ON/Pin6
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delay
+			mov r1, #0x80                ;ON/Pin7 WINNER PIN
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delay
+			
+			;//// PORT 5
+			mov r3, #0x01                ;ON/Pin0
+			strb r3, [r2, #0x02]
+			bl delay
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delay
+			mov r3, #0x02                ;ON/Pin1
+			strb r3, [r2, #0x02]
+			bl delay
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delay
+			mov r3, #0x04                ;ON/Pin2
+			strb r3, [r2, #0x02]
+			bl delay
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delay
+			mov r3, #0x10                ;ON/Pin4 no 3
+			strb r3, [r2, #0x02]
+			bl delay
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delay
+			mov r3, #0x20                ;ON/Pin5
+			strb r3, [r2, #0x02]
+			bl delay
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delay
+			mov r3, #0x40                ;ON/Pin6
+			strb r3, [r2, #0x02]
+			bl delay
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delay
+			mov r3, #0x80                ;ON/Pin7
+			strb r3, [r2, #0x02]
+			bl delay
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delay
+			
+			;///HEADED BACK starting at port 5 again
+			
+			
+			mov r3, #0x40                ;ON/Pin6
+			strb r3, [r2, #0x02]
+			bl delay
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delay
+			mov r3, #0x20                ;ON/Pin5
+			strb r3, [r2, #0x02]
+			bl delay
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delay
+			mov r3, #0x10                ;ON/Pin4 no 3
+			strb r3, [r2, #0x02]
+			bl delay
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delay
+			mov r3, #0x04                ;ON/Pin2
+			strb r3, [r2, #0x02]
+			bl delay
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delay
+			mov r3, #0x02                ;ON/Pin1
+			strb r3, [r2, #0x02]
+			bl delay
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delay
+			mov r3, #0x01                ;ON/Pin0
+			strb r3, [r2, #0x02]
+			bl delay
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delay
+			
+			;///port 4 back
+			
+			mov r1, #0x80                ;ON/Pin7 WINNER
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00              
+			strb r1, [r0, #0x02]
+			bl delay
+			mov r1, #0x40                ;ON/Pin6
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delay
+			mov r1, #0x20                ;ON/Pin5
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delay
+			mov r1, #0x10                ;ON/Pin4
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delay
+			mov r1, #0x08                ;ON/Pin3
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delay
+			mov r1, #0x04                ;ON/Pin2
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delay
+			mov r1, #0x02                ;ON/Pin1
+			strb r1, [r0, #0x02]
+			bl delay
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delay
+			
+			b LEDs
+			
+			pop{lr}
+			endp
+			
+LEDs2       function
+			push{lr}
+			mov r8, #20
+			mov r1, #0x01			;ON/Pin0
+			
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00              
+			strb r1, [r0, #0x02]
+			bl delayf
+			mov r1, #0x02                ;ON/Pin1
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delayf
+			mov r1, #0x04                ;ON/Pin2
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delayf
+			mov r1, #0x08                ;ON/Pin3
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delayf
+			mov r1, #0x10                ;ON/Pin4
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delayf
+			mov r1, #0x20                ;ON/Pin5
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delayf
+			mov r1, #0x40                ;ON/Pin6
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delayf
+			mov r1, #0x80                ;ON/Pin7 WINNER PIN
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delayf
+			
+			;//// PORT 5
+			mov r3, #0x01                ;ON/Pin0
+			strb r3, [r2, #0x02]
+			bl delayf
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delayf
+			mov r3, #0x02                ;ON/Pin1
+			strb r3, [r2, #0x02]
+			bl delayf
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delayf
+			mov r3, #0x04                ;ON/Pin2
+			strb r3, [r2, #0x02]
+			bl delayf
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delayf
+			mov r3, #0x10                ;ON/Pin4 no 3
+			strb r3, [r2, #0x02]
+			bl delayf
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delayf
+			mov r3, #0x20                ;ON/Pin5
+			strb r3, [r2, #0x02]
+			bl delayf
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delayf
+			mov r3, #0x40                ;ON/Pin6
+			strb r3, [r2, #0x02]
+			bl delayf
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delayf
+			mov r3, #0x80                ;ON/Pin7
+			strb r3, [r2, #0x02]
+			bl delayf
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delayf
+			
+			;///HEADED BACK starting at port 5 again
+			
+			
+			mov r3, #0x40                ;ON/Pin6
+			strb r3, [r2, #0x02]
+			bl delayf
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delayf
+			mov r3, #0x20                ;ON/Pin5
+			strb r3, [r2, #0x02]
+			bl delayf
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delayf
+			mov r3, #0x10                ;ON/Pin4 no 3
+			strb r3, [r2, #0x02]
+			bl delayf
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delayf
+			mov r3, #0x04                ;ON/Pin2
+			strb r3, [r2, #0x02]
+			bl delayf
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delayf
+			mov r3, #0x02                ;ON/Pin1
+			strb r3, [r2, #0x02]
+			bl delayf
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delayf
+			mov r3, #0x01                ;ON/Pin0
+			strb r3, [r2, #0x02]
+			bl delayf
+			bl Button					
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			bl delayf
+			
+			;///port 4 back
+			
+			mov r1, #0x80                ;ON/Pin7 WINNER
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00              
+			strb r1, [r0, #0x02]
+			bl delayf
+			mov r1, #0x40                ;ON/Pin6
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delayf
+			mov r1, #0x20                ;ON/Pin5
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delayf
+			mov r1, #0x10                ;ON/Pin4
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delayf
+			mov r1, #0x08                ;ON/Pin3
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delayf
+			mov r1, #0x04                ;ON/Pin2
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delayf
+			mov r1, #0x02                ;ON/Pin1
+			strb r1, [r0, #0x02]
+			bl delayf
+			bl Button
+			mov r1, #0x00                
+			strb r1, [r0, #0x02]
+			bl delayf
+			
+			b LEDs2
+			
+			pop{lr}
+			endp
+			
+Button		function
+			push {lr}
+			
+			ldrb r1, [r9, #0x00]
+			and r1, #0x80  			;WHAT IS HAPPENING TO R1
+			cmp r1, #0x80               			
+			beq delaylong
+			
+			pop {lr}
+			bx lr
+			
+			endp
+
+lightcheck  function
+			push{lr}
+			ldrb r12, [r0, #0x02]
+			and r12, #0x80
+			cmp r12, #0x80
+			bne LOSE
+			beq WIN
+			pop{lr}
+			bx lr
+			endp
+
+			
+LOSE        function
+			push{lr}
+			mov r7, #0x01                ;ON/Pin0
+			strb r7, [r6, #0x02]
+			bl delay
+			mov r7, #0x00                
+			strb r7, [r6, #0x02]
+			bl delay
+			sub r8, #1
+			cmp r8, #0
+			
+			bne LOSE
+			add r5, #1  ;ADDS TO THE ROUND COUNT
+			mov r11, #20
+			cmp r5, #3
+			beq STOP
+			b START
+			pop{lr}
+			bx lr
+			endp
+			
+			
+WIN        	function
+			push{lr}
+			mov r7, #0x02                ;ON/Pin1
+			strb r7, [r6, #0x02]
+			bl delay
+			mov r7, #0x00                
+			strb r7, [r6, #0x02]
+			bl delay
+			sub r8, #1
+			cmp r8, #0
+			bne WIN
+			
+			
+			;ENDS GAME
+			mov r11, #20
+			add r5, #1 ;ADDS TO THE ROUND COUNT
+			cmp r5, #3
+			beq STOP
+			b START
+		
+			pop{lr}
+			bx lr
+			endp
+
+STOP        function
+			push{lr}
+			mov r1, #0x00              
+			strb r1, [r0, #0x02]
+			mov r3, #0x00                
+			strb r3, [r2, #0x02]
+			b STOP  ;ENDS THE GAME
+			pop{lr}
+			bx lr
+			endp
+
+
+delay 		function
+			mov r4, #20000 ;Higher = slower, Lower = faster
+delay2		sub r4, #1
+			cmp r4, #0
+			bne delay2
+			
+			bx lr
+			endp
+
+delayf 		function
+			mov r4, #8000 ;Higher = slower, Lower = faster
+delayff		sub r4, #1
+			cmp r4, #0
+			bne delayff
+			
+			bx lr
+			endp	
+
+delaylong 	function
+			mov r4, #60000 ;Higher = slower, Lower = faster
+delaylong2	sub r4, #1
+			cmp r4, #0
+			bne delaylong2
+			bl lightcheck
+			bl Button
+			b LEDs
+			endp
+				
+			end
+
+
+		
